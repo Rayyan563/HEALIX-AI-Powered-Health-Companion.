@@ -6,7 +6,9 @@ import TextField from "@mui/material/TextField";
 import { Link } from "react-router-dom";
 import Alert from "@mui/material/Alert";
 import { FcGoogle } from "react-icons/fc";
+import { useNavigate } from "react-router-dom";
 const Register_page = () => {
+  const navigate = useNavigate();
     const [formData, setFormData] = useState({
       name: "",
       email: "",
@@ -31,13 +33,13 @@ const Register_page = () => {
       setPasswordMatch(true);
 
       console.log(formData);
-
       setFormData({
         name: "",
         email: "",
         password: "",
         confirmPassword: "",
       });
+      navigate("/onboarding");
     };
   return (
     <div className="h-screen w-screen flex">
