@@ -5,6 +5,7 @@ import Register_page from './Registration/Register_page';
 import LoginPage from './Registration/LoginPage';
 import { Home } from 'lucide-react';
 import Healix_Home from './Home/Healix_Home';
+import OnboardingSteps from './Registration/OnboardingSteps'
 function App() {
   return (
     <>
@@ -12,6 +13,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Hero />} />
           <Route path="/register" element={<Register_page />} />
+          <Route path="/onboarding" element={<OnboardingSteps />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/Healix_Home" element={<Healix_Home />} />
 
