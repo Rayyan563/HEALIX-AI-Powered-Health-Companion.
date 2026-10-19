@@ -20,7 +20,7 @@ export function SymptompsCard(props){
 };
 const Hero_features = () => {
   return (
-    <div className="features w-screen h-[720px] flex flex-col bg-white items-center justify-center gap-14">
+    <div id="features" className="features w-screen h-[720px] flex flex-col bg-white items-center justify-center gap-14">
       <div className="features-header w-11/12 h-24 flex flex-col justify-center">
         <p className="text-lg text-[#00C9A7] font-sans font-medium mt-10">
           CAPABILITIES

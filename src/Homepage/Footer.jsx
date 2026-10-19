@@ -4,7 +4,7 @@ import { FaLinkedin, FaXTwitter, FaInstagram } from "react-icons/fa6";
 const Footer = () => {
   return (
     <>
-      <div className="w-screen bg-[#061021] px-20 py-10 flex justify-between">
+      <div id="footer" className="w-screen bg-[#061021] px-20 py-10 flex justify-between">
         <div className="boder-2">
           <div className="w-[200px] h-[80px]">
             <img src={logo} alt="Healix" />

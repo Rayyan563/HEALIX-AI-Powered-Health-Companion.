@@ -11,7 +11,7 @@ import Hero_Journey from "./Hero_Journey";
 import Hero_Explainibility from "./Hero_Explainibility"
 import Hero_finalCTA from "./Hero_finalCTA";
 import Footer from "./Footer";
-export function CTAButtons({ primary, secondary, primaryTo, secondaryTo }) {
+export function CTAButtons({ primary, secondary, primaryTo, secondaryTo,secondaryHref }) {
   return (
     <div className="text-white flex justify-start gap-8 text-lg">
       <Link
@@ -20,13 +20,21 @@ export function CTAButtons({ primary, secondary, primaryTo, secondaryTo }) {
       >
         {primary}
       </Link>
-
-      <Link
-        to={secondaryTo}
-        className="border-white border-2 px-4 py-2 rounded-3xl transition-transform duration-500 hover:scale-105"
-      >
-        {secondary}
-      </Link>
+      {secondaryHref ? (
+        <a
+          href={secondaryHref}
+          className="border-white border-2 px-4 py-2 rounded-3xl transition-transform duration-500 hover:scale-105"
+        >
+          {secondary}
+        </a>
+      ) : (
+        <Link
+          to={secondaryTo}
+          className="border-white border-2 px-4 py-2 rounded-3xl transition-transform duration-500 hover:scale-105"
+        >
+          {secondary}
+        </Link>
+      )}
     </div>
   );
 };
@@ -38,31 +46,31 @@ export function Navbar(){
       </div>
       <div className="h-full w-2/5 flex justify-between items-center text-white text-xl ">
         <a
-          href=""
+          href="#home"
           className="transition-transform duration-300 hover:underline hover:decoration-[#00C9A7] underline-offset-4"
         >
           Home
         </a>
         <a
-          href=""
+          href="#journey"
           className="transition-transform duration-300 hover:underline hover:decoration-[#00C9A7] underline-offset-4"
         >
           About
         </a>
         <a
-          href=""
+          href="#features"
           className="transition-transform duration-300 hover:underline hover:decoration-[#00C9A7] underline-offset-4"
         >
           Features
         </a>
         <a
-          href=""
+          href="#how-it-works"
           className="transition-transform duration-300 hover:underline hover:decoration-[#00C9A7] underline-offset-4"
         >
           How it works
         </a>
         <a
-          href=""
+          href="#footer"
           className="transition-transform duration-300 hover:underline hover:decoration-[#00C9A7] underline-offset-4"
         >
           Contact
@@ -93,6 +101,7 @@ const Hero = () => {
   return (
     <div>
       <div
+        id="home"
         className="h-screen w-screen relative bg-cover bg-center
              before:absolute before:inset-0 before:bg-black/55 before:content-['']"
         style={{ backgroundImage: `url(${heroBg})` }}
@@ -126,7 +135,7 @@ const Hero = () => {
               primary="Get started Now →"
               secondary="Explore How it works"
               primaryTo="/get-started"
-              secondaryTo="/how-it-works"
+              secondaryHref="#how-it-works"
             />
           </div>
           <div className="w-1/4 h-5/6 flex flex-col justify-center items-center ml-24 mt-10 border-2 border-gray-400 rounded-3xl bg-white/5">
@@ -141,7 +150,7 @@ const Hero = () => {
       <Hero_Journey />
       <Hero_Explainibility />
       <Hero_finalCTA />
-      <Footer/>
+      <Footer />
     </div>
   );
 };

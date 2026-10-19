@@ -64,6 +64,7 @@ const Hero_how_works = () => {
   }, []);
   return (
     <div
+      id="how-it-works"
       className="how-works w-screen h-[650px] flex flex-col bg-white items-center justify-center pt-16 "
     >
       <Hero_header_steps minheading="PROCESS" mainHeader="How It Works" />

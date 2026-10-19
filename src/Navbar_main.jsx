@@ -65,8 +65,8 @@ const Navbar_links = ({pathTo, name}) => {
 };
 const Navbar_main = () => {
   return (
-    <div className="w-screen h-16 bg-[#0B1A2E] flex justify-between px-4 items-center">
-      <div className="w-1/6 h-full flex items-center">
+    <div className="sticky w-screen h-16 bg-[#0B1A2E] flex justify-between px-8 items-center">
+      <div className="h-full flex items-center pr-3">
         <img src={logoImage} alt="HEALIX" className="w-auto h-full" />
       </div>
       <div className="h-full flex justify-evenly items-center text-white gap-6 text-lg">

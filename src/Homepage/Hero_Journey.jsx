@@ -46,7 +46,10 @@ const Hero_Journey = () => {
       return () => clearInterval(interval);
   },[startAnimation]);
   return (
-    <div className="journey w-screen h-auto flex flex-col bg-white items-center justify-center gap-20 p-20">
+    <div
+      id="journey"
+      className="journey w-screen h-auto flex flex-col bg-white items-center justify-center gap-20 p-20"
+    >
       <Hero_header_steps
         minheading="CONTINUUM"
         mainHeader="From understanding your health to knowing what to do next"
@@ -66,7 +69,7 @@ const Hero_Journey = () => {
           activityName="Personalized Guidance"
           active={activeStep >= 1}
         />
-        <div className="h-[2px] w-40 bg-[#00C9A7]"/>
+        <div className="h-[2px] w-40 bg-[#00C9A7]" />
         <Journey
           icon={MapPin}
           activityName="Nearby Healthcare"
