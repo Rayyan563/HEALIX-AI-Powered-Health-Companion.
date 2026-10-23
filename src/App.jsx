@@ -7,6 +7,7 @@ import { Home } from 'lucide-react';
 import Healix_Home from './Home/Healix_Home';
 import OnboardingSteps from './Registration/OnboardingSteps'
 import Dashboard from './Dashboard';
+import HealixAssesment from './Assesment/HealixAssesment';
 function App() {
   return (
     <>
@@ -22,7 +23,7 @@ function App() {
           <Route path="/Dashboard" element={<Dashboard />} />
           <Route
             path="/HealthAssesment"
-            element={<div>this page is in progress</div>}
+            element={<HealixAssesment/>}
           />
           <Route
             path="/MedicalReports"
@@ -57,5 +58,4 @@ function App() {
     </>
   );
 }
-
 export default App
