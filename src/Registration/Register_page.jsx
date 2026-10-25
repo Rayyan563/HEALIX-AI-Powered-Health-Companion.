@@ -7,7 +7,12 @@ import { Link } from "react-router-dom";
 import Alert from "@mui/material/Alert";
 import { FcGoogle } from "react-icons/fc";
 import { useNavigate } from "react-router-dom";
+import GoogleAuthButton from "./GoogleAuthButton";
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const Register_page = () => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
     const [formData, setFormData] = useState({
       name: "",
@@ -22,8 +27,14 @@ const Register_page = () => {
       });
     };
     const [passwordMatch, setPasswordMatch] = useState(true);
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
       e.preventDefault();
+      setError("");
+
+      if (!EMAIL_REGEX.test(formData.email.trim())) {
+        setError("Please enter a valid email address");
+        return;
+      }
 
       if (formData.password !== formData.confirmPassword) {
         setPasswordMatch(false);
@@ -31,16 +42,51 @@ const Register_page = () => {
       }
 
       setPasswordMatch(true);
+      setLoading(true);
 
-      console.log(formData);
-      setFormData({
-        name: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-      });
-      navigate("/onboarding");
+      try {
+        const response = await fetch(
+          "http://localhost:8081/api/v1/auth/register",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              fullName: formData.name,
+              email: formData.email.trim(),
+              password: formData.password,
+            }),
+          },
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(
+            data.message || "Registration failed. Please try again.",
+          );
+        }
+
+       const registeredEmail = formData.email.trim();
+       setFormData({
+         name: "",
+         email: "",
+         password: "",
+         confirmPassword: "",
+       });
+       navigate("/verify-email", { state: { email: registeredEmail } });
+      } catch (err) {
+        setError(
+          err.message === "Failed to fetch"
+            ? "Backend se connection nahi ho pa raha."
+            : err.message,
+        );
+      } finally {
+        setLoading(false);
+      }
     };
+      
   return (
     <div className="h-screen w-screen flex">
       <div
@@ -87,13 +133,13 @@ const Register_page = () => {
 
             <div>
               <label className="block text-base mb-2 text-black/60 font-semibold font-serif">
-                Email address or phone<span className="text-red-500">*</span>
+                Email address<span className="text-red-500">*</span>
               </label>
 
               <TextField
                 fullWidth
                 required
-                placeholder="Enter your email or phone"
+                placeholder="Enter your email"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
@@ -133,10 +179,16 @@ const Register_page = () => {
             <div className="text-white flex  flex-col justify-start text-lg">
               <button
                 type="submit"
-                className="border-[#00C9A7] border-2 px-4 py-2 rounded-3xl text-black bg-[#00C9A7] font-semibold  font-serif transition-transform duration-500 hover:scale-105"
+                disabled={loading}
+                className="border-[#00C9A7] border-2 px-4 py-2 rounded-3xl text-black bg-[#00C9A7] font-semibold font-serif transition-transform duration-500 hover:scale-105 disabled:opacity-60"
               >
-                Register now ⟶
+                {loading ? "Creating Account..." : "Register now ⟶"}
               </button>
+              {error && (
+                <Alert severity="error" className="mt-4">
+                  {error}
+                </Alert>
+              )}
               <div className="pt-2">
                 {passwordMatch ? (
                   ""
@@ -149,13 +201,7 @@ const Register_page = () => {
             </div>
           </form>
           <div className="mt-3 text-lg">
-            <button
-              type="button"
-              className="w-full border-black/10 border-2 text-black px-4 py-2 rounded-3xl font-semibold font-serif transition-transform duration-500 hover:scale-105 flex items-center justify-center gap-2"
-            >
-              <FcGoogle className="text-xl" />
-              Signup with Google
-            </button>
+            <GoogleAuthButton mode="signup" />
           </div>
           <p className="text-center text-black/60 text-lg mt-3">
             Already have an account?{" "}

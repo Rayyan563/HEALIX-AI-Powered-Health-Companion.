@@ -3,8 +3,28 @@ import Onboarding_navbar from "./Onboarding_navbar";
 import Onboarding_header from "./Onboarding_header";
 import TextField from "@mui/material/TextField";
 import { useNavigate } from "react-router-dom";
+import { updateOnboardingStatus } from "../utils/onboarding";
 const OnboardingSteps = () => {
   const navigate = useNavigate();
+    useEffect(() => {
+      if (!localStorage.getItem("token")) navigate("/login");
+    }, [navigate]);
+
+    const finishOnboarding = async (status) => {
+      try {
+        await updateOnboardingStatus(status);
+      } catch (err) {
+        if (err.message === "UNAUTHORIZED") {
+          navigate("/login");
+          return;
+        }
+        console.error(err);
+      }
+      sessionStorage.removeItem("onboardingStep");
+      navigate("/Healix_Home");
+    };
+
+    const handleSkip = () => finishOnboarding("SKIPPED");
   const [currentStep, setCurrentStep] = useState(() => {
     return Number(sessionStorage.getItem("onboardingStep")) || 1;
   });
@@ -78,17 +98,14 @@ const OnboardingSteps = () => {
       [e.target.name]: e.target.value,
     }));
   };
-  const handleNext = (e) => {
-    e.preventDefault();
-    console.log(formData);
-    if (currentStep < 4) {
-      setCurrentStep((prev) => prev + 1);
-    } else {
-      console.log(formData);
-       sessionStorage.removeItem("onboardingStep");
-      navigate("/Healix_Home");
-    }
-  };
+    const handleNext = async (e) => {
+      e.preventDefault();
+      if (currentStep < 4) {
+        setCurrentStep((prev) => prev + 1);
+        return;
+      }
+      await finishOnboarding("COMPLETED");
+    };
   const handleBack = () => {
     if (currentStep > 1) {
       setCurrentStep((prev) => prev - 1);
@@ -240,7 +257,7 @@ const OnboardingSteps = () => {
             <div className="flex justify-between items-center mt-3">
               <button
                 className="text-base text-black/60 tracking-wider font-serif py-2"
-                onClick={() => navigate("/Healix_Home")}
+                onClick={handleSkip}
               >
                 Skip Setup
               </button>
@@ -315,7 +332,7 @@ const OnboardingSteps = () => {
             <div className="flex justify-between items-center mt-3">
               <button
                 className="text-base text-black/60 tracking-wider font-serif py-2"
-                onClick={() => navigate("/Healix_Home")}
+                onClick={handleSkip}
               >
                 Skip Setup
               </button>
@@ -413,7 +430,7 @@ const OnboardingSteps = () => {
             <div className="flex justify-between items-center mt-3">
               <button
                 className="text-base text-black/60 tracking-wider font-serif py-2"
-                onClick={() => navigate("/Healix_Home")}
+                onClick={handleSkip}
               >
                 Skip Setup
               </button>
@@ -488,7 +505,7 @@ const OnboardingSteps = () => {
             <div className="flex justify-between items-center mt-3">
               <button
                 className="text-base text-black/60 tracking-wider font-serif py-2"
-                onClick={() => navigate("/Healix_Home")}
+                onClick={handleSkip}
               >
                 Skip Setup
               </button>

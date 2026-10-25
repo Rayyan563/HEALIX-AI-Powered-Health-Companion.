@@ -42,7 +42,9 @@ export function Navbar(){
   return (
     <div className="h-full w-full flex justify-between items-center">
       <div className="w-1/6 h-full flex items-center">
-        <img src={logoImage} alt="HEALIX" className="w-auto h-full" />
+        <a href="#home" className="inline-flex">
+          <img src={logoImage} alt="HEALIX" className="w-auto h-full" />
+        </a>
       </div>
       <div className="h-full w-2/5 flex justify-between items-center text-white text-xl ">
         <a

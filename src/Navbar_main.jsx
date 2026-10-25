@@ -67,7 +67,9 @@ const Navbar_main = () => {
   return (
     <div className="sticky w-screen h-16 bg-[#0B1A2E] flex justify-between px-8 items-center">
       <div className="h-full flex items-center pr-3">
-        <img src={logoImage} alt="HEALIX" className="w-auto h-full" />
+        <Link to="/" className="h-full flex items-center">
+          <img src={logoImage} alt="HEALIX" className="w-auto h-full" />
+        </Link>
       </div>
       <div className="h-full flex justify-evenly items-center text-white gap-6 text-lg">
         <Navbar_links pathTo="/Healix_Home" name="Home" />
@@ -82,7 +84,15 @@ const Navbar_main = () => {
       <div className="flex items-center justify-center gap-4 text-xl ml-12">
         <div className="flex items-center gap-2 text-white font-thin">
           <UploadAvatars />
-          <Navbar_links pathTo="/Dashboard" name="Alexandra" />
+          <Navbar_links
+            pathTo="/Dashboard"
+            className="normal-case"
+            name={
+              JSON.parse(localStorage.getItem("user") || "{}")
+                .fullName?.trim()
+                .split(/\s+/)[0] || "Profile"
+            }
+          />
         </div>
         <div className="flex items-center text-white/60 gap-2">
           <LogoutIcon />

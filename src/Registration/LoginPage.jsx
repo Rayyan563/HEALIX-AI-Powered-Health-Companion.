@@ -1,36 +1,108 @@
 import { useState } from "react";
-import LoginBG from "../assets/LoginBG.png"
-import logo from "../assets/hero-logo.png"
+import LoginBG from "../assets/LoginBG.png";
+import logo from "../assets/hero-logo.png";
 import { Shield } from "lucide-react";
 import TextField from "@mui/material/TextField";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Alert from "@mui/material/Alert";
 import { FcGoogle } from "react-icons/fc";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import { useNavigate } from "react-router-dom";
-const Register_page = () => {
+import GoogleAuthButton from "./GoogleAuthButton";
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+const LoginPage = () => {
   const navigate = useNavigate();
-    const [formData, setFormData] = useState({
-      email: "",
-      password: "",
+  const location = useLocation();
+  const justVerified = location.state?.verified;
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [formData, setFormData] = useState({
+    email: location.state?.email || "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
     });
-    const handleChange = (e) => {
-      setFormData({
-        ...formData,
-        [e.target.name]: e.target.value,
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    if (!EMAIL_REGEX.test(formData.email.trim())) {
+      setError("Please enter a valid email address");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await fetch("http://localhost:8081/api/v1/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: formData.email.trim(),
+          password: formData.password,
+        }),
       });
-    };
-    const [passwordMatch, setPasswordMatch] = useState(true);
-    const handleSubmit = (e) => {
-      e.preventDefault();
-      console.log(formData);
+
+      let data = {};
+      try {
+        data = await response.json();
+      } catch {
+        data = {};
+      }
+
+      if (!response.ok) {
+        throw new Error(data.message || "Invalid email or password");
+      }
+
+      localStorage.setItem("token", data.token);
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          userId: data.userId,
+          fullName: data.fullName,
+          email: data.email,
+          onboardingStatus: data.onboardingStatus,
+        }),
+      );
+
       setFormData({
         email: "",
         password: "",
       });
-      navigate("/Healix_Home");
-    };
+
+      // First-time user -> onboarding. Everyone else -> home.
+      navigate(
+        data.onboardingStatus === "PENDING" ? "/onboarding" : "/Healix_Home",
+      );
+    } catch (err) {
+      if (err.message === "Please verify your email first") {
+        navigate("/verify-email", {
+          state: { email: formData.email.trim() },
+        });
+        return;
+      }
+
+      setError(
+        err.message === "Failed to fetch"
+          ? "Backend se connection nahi ho pa raha."
+          : err.message,
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="h-screen w-screen flex">
       <div
@@ -54,22 +126,30 @@ const Register_page = () => {
           </h3>
         </div>
       </div>
+
       <div className="h-screen w-3/5 flex justify-center items-center bg-[#F8F9FB]">
         <div className="w-full max-w-[500px] border-2 rounded-3xl shadow-lg py-10 px-10">
           <h1 className="font-serif text-5xl">Sign in to Healix</h1>
           <p className="text-base text-black/60 tracking-wider py-2">
             Enter your credentials to continue your journey
           </p>
+
+          {justVerified && (
+            <Alert severity="success" className="mb-3">
+              Email verified! Please sign in.
+            </Alert>
+          )}
+
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             <div>
               <label className="block text-base mb-2 text-black/60 font-semibold font-serif">
-                Email address or phone<span className="text-red-500">*</span>
+                Email address<span className="text-red-500">*</span>
               </label>
 
               <TextField
                 fullWidth
                 required
-                placeholder="Enter your email or phone"
+                placeholder="Enter your email"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
@@ -85,17 +165,17 @@ const Register_page = () => {
                 fullWidth
                 required
                 type="password"
-                placeholder="Create a password"
+                placeholder="Enter your password"
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
               />
             </div>
+
             <div className="text-[#00C9A7] flex justify-between items-center">
               <FormControlLabel
                 control={
                   <Checkbox
-                    // checked={rememberMe}
                     defaultChecked
                     sx={{
                       color: "#00C9A7",
@@ -122,30 +202,25 @@ const Register_page = () => {
                 Forget Password
               </Link>
             </div>
-            <div className="text-white flex  flex-col justify-start text-lg">
+
+            <div className="text-white flex flex-col justify-start text-lg">
               <button
                 type="submit"
-                className="border-[#00C9A7] border-2 px-4 py-2 rounded-3xl text-black bg-[#00C9A7] font-semibold  font-serif transition-transform duration-500 hover:scale-105"
+                disabled={loading}
+                className="border-[#00C9A7] border-2 px-4 py-2 rounded-3xl
+                text-black bg-[#00C9A7] font-semibold font-serif
+                transition-transform duration-500 hover:scale-105
+                disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                Sign In ⟶
+                {loading ? "Signing in..." : "Sign In ⟶"}
               </button>
+
               <div className="pt-2">
-                {/* {passwordMatch ? (
-                  ""
-                ) : (
-                  <Alert severity="error" className="py-2">
-                    Email or Paasword is not Valid
-                  </Alert>
-                )} */}
+                {error && <Alert severity="error">{error}</Alert>}
               </div>
+
               <div className="mt-3 text-lg">
-                <button
-                  type="button"
-                  className="w-full border-black/10 border-2 text-black px-4 py-2 rounded-3xl font-semibold font-serif transition-transform duration-500 hover:scale-105 flex items-center justify-center gap-2"
-                >
-                  <FcGoogle className="text-xl" />
-                  Continue with Google
-                </button>
+                <GoogleAuthButton mode="login" />
               </div>
             </div>
           </form>
@@ -163,5 +238,6 @@ const Register_page = () => {
       </div>
     </div>
   );
-}
-export default Register_page
+};
+
+export default LoginPage;

@@ -155,7 +155,11 @@ const Dashboard = () => {
       </div>
       <div className="flex justify-between px-12 items-center">
         <div>
-          <h1 className="font-serif text-5xl">Good Morning, Alexandra</h1>
+          <h1 className="font-serif text-5xl">Good Morning,&nbsp;{
+              JSON.parse(localStorage.getItem("user") || "{}")
+                .fullName?.trim()
+                .split(/\s+/)[0] || "Profile"
+            }</h1>
           <p className="text-base text-black/60 tracking-wider py-2">
             Tuesday, October 15, 2024 • Your health profile is up to date.
           </p>
