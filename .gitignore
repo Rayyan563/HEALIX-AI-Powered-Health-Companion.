@@ -69,3 +69,13 @@ dist-ssr
 # OS files
 # =========================
 Thumbs.db
+# Local datasets
+DATA/
+
+# Large trained models
+MODELS/SYMPTOMS/*.joblib
+
+# Python cache files
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
