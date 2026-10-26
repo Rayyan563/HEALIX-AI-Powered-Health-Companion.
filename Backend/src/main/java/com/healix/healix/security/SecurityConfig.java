@@ -40,6 +40,9 @@ public class SecurityConfig {
                     "/api/v1/auth/verify-email",
                     "/api/v1/auth/resend-code",
                     "/api/v1/auth/google",
+                    "/api/v1/auth/forgot-password",
+                    "/api/v1/auth/verify-reset-otp",
+                    "/api/v1/auth/reset-password",
                     "/error"
                 ).permitAll()
                 .anyRequest().authenticated()
@@ -71,12 +74,19 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowedOrigins(List.of("http://localhost:5173"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("Content-Type", "Authorization"));
+        config.setAllowedMethods(
+            List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")
+        );
+        config.setAllowedHeaders(
+            List.of("Content-Type", "Authorization")
+        );
         config.setAllowCredentials(true);
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        UrlBasedCorsConfigurationSource source =
+            new UrlBasedCorsConfigurationSource();
+
         source.registerCorsConfiguration("/**", config);
+
         return source;
     }
 }

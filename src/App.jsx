@@ -8,6 +8,7 @@ import OnboardingSteps from "./Registration/OnboardingSteps";
 import Dashboard from "./Dashboard";
 import HealixAssesment from "./Assesment/HealixAssesment";
 import VerifyEmail from "./Registration/VerifyEmail";
+import ForgotPassword from "./Registration/ForgotPassword";
 
 function App() {
  function GetStartedRoute() {
@@ -92,12 +93,7 @@ function App() {
             element={<div>this page is in progress</div>}
           />
 
-          <Route
-            path="/forgotPasswd"
-            element={
-              <div>tera paswword mujhe kaise pata hoga??? khud dekh nah</div>
-            }
-          />
+          <Route path="/forgotPasswd" element={<ForgotPassword />} />
           <Route path="/get-started" element={<GetStartedRoute />} />
         </Routes>
       </BrowserRouter>

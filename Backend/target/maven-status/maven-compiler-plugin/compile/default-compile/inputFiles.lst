@@ -1,12 +1,15 @@
 C:\Users\Mr. kaif\OneDrive\Desktop\Healix-AI\Backend\src\main\java\com\healix\healix\auth\AuthController.java
 C:\Users\Mr. kaif\OneDrive\Desktop\Healix-AI\Backend\src\main\java\com\healix\healix\auth\ProtectedTestController.java
 C:\Users\Mr. kaif\OneDrive\Desktop\Healix-AI\Backend\src\main\java\com\healix\healix\dto\AuthResponse.java
+C:\Users\Mr. kaif\OneDrive\Desktop\Healix-AI\Backend\src\main\java\com\healix\healix\dto\ForgotPasswordRequest.java
 C:\Users\Mr. kaif\OneDrive\Desktop\Healix-AI\Backend\src\main\java\com\healix\healix\dto\GoogleAuthRequest.java
 C:\Users\Mr. kaif\OneDrive\Desktop\Healix-AI\Backend\src\main\java\com\healix\healix\dto\LoginRequest.java
 C:\Users\Mr. kaif\OneDrive\Desktop\Healix-AI\Backend\src\main\java\com\healix\healix\dto\OnboardingStatusRequest.java
 C:\Users\Mr. kaif\OneDrive\Desktop\Healix-AI\Backend\src\main\java\com\healix\healix\dto\RegisterRequest.java
 C:\Users\Mr. kaif\OneDrive\Desktop\Healix-AI\Backend\src\main\java\com\healix\healix\dto\ResendCodeRequest.java
+C:\Users\Mr. kaif\OneDrive\Desktop\Healix-AI\Backend\src\main\java\com\healix\healix\dto\ResetPasswordRequest.java
 C:\Users\Mr. kaif\OneDrive\Desktop\Healix-AI\Backend\src\main\java\com\healix\healix\dto\VerifyEmailRequest.java
+C:\Users\Mr. kaif\OneDrive\Desktop\Healix-AI\Backend\src\main\java\com\healix\healix\dto\VerifyResetOtpRequest.java
 C:\Users\Mr. kaif\OneDrive\Desktop\Healix-AI\Backend\src\main\java\com\healix\healix\exception\GlobalExceptionHandler.java
 C:\Users\Mr. kaif\OneDrive\Desktop\Healix-AI\Backend\src\main\java\com\healix\healix\HealixApplication.java
 C:\Users\Mr. kaif\OneDrive\Desktop\Healix-AI\Backend\src\main\java\com\healix\healix\healthprofile\HealthProfile.java
