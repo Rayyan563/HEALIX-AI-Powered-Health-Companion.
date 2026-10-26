@@ -95,7 +95,7 @@ const LoginPage = () => {
 
       setError(
         err.message === "Failed to fetch"
-          ? "Backend se connection nahi ho pa raha."
+          ? "Backend is not running"
           : err.message,
       );
     } finally {
