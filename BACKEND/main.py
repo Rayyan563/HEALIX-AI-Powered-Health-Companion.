@@ -1,14 +1,23 @@
 from pathlib import Path
 
+# pyright: reportMissingImports=false
 import joblib
 import numpy as np
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException  # type: ignore[reportMissingImports]
+from fastapi.middleware.cors import CORSMiddleware  # type: ignore[reportMissingImports]
 from pydantic import BaseModel, Field
 
 app = FastAPI(
     title="HEALIX API",
     description="AI-powered healthcare decision-support prototype",
     version="1.0.0"
+)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 BASE_DIR = Path(__file__).resolve().parent.parent
