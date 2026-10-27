@@ -20,6 +20,9 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Map;
 
+import com.healix.healix.dto.ForgotPasswordRequest;
+import com.healix.healix.dto.VerifyResetOtpRequest;
+import com.healix.healix.dto.ResetPasswordRequest;
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
@@ -70,4 +73,21 @@ public class AuthController {
                 request.getCredential()
         );
     }
+    @PostMapping("/forgot-password")
+public Map<String, String> forgotPassword(
+        @Valid @RequestBody ForgotPasswordRequest request) {
+    return authService.forgotPassword(request);
+}
+
+@PostMapping("/verify-reset-otp")
+public Map<String, String> verifyResetOtp(
+        @Valid @RequestBody VerifyResetOtpRequest request) {
+    return authService.verifyResetOtp(request);
+}
+
+@PostMapping("/reset-password")
+public Map<String, String> resetPassword(
+        @Valid @RequestBody ResetPasswordRequest request) {
+    return authService.resetPassword(request);
+}
 }

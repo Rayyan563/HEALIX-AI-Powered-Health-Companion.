@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import java.security.SecureRandom;
 import java.time.Duration;
 import java.time.Instant;
+import org.springframework.util.StringUtils;
+import java.util.Map;
 
 @Service
 public class AuthService {
@@ -145,4 +147,108 @@ public class AuthService {
                     "Could not send the verification email. Check the address and try again.");
         }
     }
+    public Map<String, String> forgotPassword(ForgotPasswordRequest request) {
+    String email = request.getEmail().trim().toLowerCase();
+
+    User user = userRepository.findByEmailIgnoreCase(email).orElse(null);
+
+    // Same response for unknown and unverified accounts.
+    if (user == null || !user.isVerified()) {
+        return Map.of("message",
+                "If a verified account exists, a reset code has been sent.");
+    }
+
+    if (user.getResetCodeSentAt() != null
+            && Duration.between(user.getResetCodeSentAt(), Instant.now())
+                    .getSeconds() < RESEND_COOLDOWN_SECONDS) {
+        return Map.of("message",
+                "If a verified account exists, a reset code has been sent.");
+    }
+
+    String code = String.format("%06d", random.nextInt(1_000_000));
+
+    user.setResetCodeHash(passwordEncoder.encode(code));
+    user.setResetCodeExpiresAt(
+            Instant.now().plus(Duration.ofMinutes(CODE_EXPIRY_MINUTES)));
+    user.setResetCodeSentAt(Instant.now());
+    user.setResetCodeAttempts(0);
+    user.setResetCodeVerified(false);
+    userRepository.save(user);
+
+    try {
+        emailService.sendPasswordResetCode(
+                user.getEmail(), user.getFullName(), code);
+    } catch (MailException e) {
+        log.error("Failed to send password reset email", e);
+        user.setResetCodeHash(null);
+        user.setResetCodeExpiresAt(null);
+        user.setResetCodeSentAt(null);
+        user.setResetCodeAttempts(0);
+        user.setResetCodeVerified(false);
+        userRepository.save(user);
+        throw new IllegalArgumentException(
+                "Could not send the reset email. Please try again later.");
+    }
+
+    return Map.of("message",
+            "If a verified account exists, a reset code has been sent.");
+}
+
+public Map<String, String> verifyResetOtp(VerifyResetOtpRequest request) {
+    User user = userRepository.findByEmailIgnoreCase(
+                    request.getEmail().trim().toLowerCase())
+            .orElseThrow(() -> new IllegalArgumentException("Invalid or expired code"));
+
+    if (!user.isVerified()
+            || user.getResetCodeHash() == null
+            || user.getResetCodeExpiresAt() == null
+            || Instant.now().isAfter(user.getResetCodeExpiresAt())
+            || user.getResetCodeAttempts() >= MAX_ATTEMPTS) {
+        throw new IllegalArgumentException("Invalid or expired code");
+    }
+
+    if (!passwordEncoder.matches(
+            request.getCode(), user.getResetCodeHash())) {
+        user.setResetCodeAttempts(user.getResetCodeAttempts() + 1);
+        userRepository.save(user);
+        throw new IllegalArgumentException("Invalid or expired code");
+    }
+
+    user.setResetCodeVerified(true);
+    userRepository.save(user);
+
+    return Map.of("message", "Reset code verified successfully");
+}
+
+public Map<String, String> resetPassword(ResetPasswordRequest request) {
+    User user = userRepository.findByEmailIgnoreCase(
+                    request.getEmail().trim().toLowerCase())
+            .orElseThrow(() -> new IllegalArgumentException("Invalid reset request"));
+
+    if (!user.isVerified()
+            || !user.isResetCodeVerified()
+            || user.getResetCodeHash() == null
+            || user.getResetCodeExpiresAt() == null
+            || Instant.now().isAfter(user.getResetCodeExpiresAt())
+            || user.getResetCodeAttempts() >= MAX_ATTEMPTS
+            || !passwordEncoder.matches(
+                    request.getCode(), user.getResetCodeHash())) {
+        throw new IllegalArgumentException(
+                "Please verify a valid reset code first");
+    }
+
+    user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+
+    // Invalidate the reset code after successful password change.
+    user.setResetCodeHash(null);
+    user.setResetCodeExpiresAt(null);
+    user.setResetCodeSentAt(null);
+    user.setResetCodeAttempts(0);
+    user.setResetCodeVerified(false);
+
+    userRepository.save(user);
+
+    return Map.of("message",
+            "Password reset successfully. Please log in with your new password.");
+}
 }

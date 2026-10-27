@@ -28,6 +28,12 @@ public class User {
     private Instant verificationSentAt;
     private int verificationAttempts;
 
+        // Forgot password fields
+    private String resetCodeHash;
+    private Instant resetCodeExpiresAt;
+    private Instant resetCodeSentAt;
+    private int resetCodeAttempts;
+    private boolean resetCodeVerified;
     public User() {
     }
 
@@ -69,4 +75,43 @@ public class User {
     public void setOnboardingStatus(String onboardingStatus) {
         this.onboardingStatus = onboardingStatus;
     }
+
+    public String getResetCodeHash() {
+    return resetCodeHash;
+}
+
+public void setResetCodeHash(String resetCodeHash) {
+    this.resetCodeHash = resetCodeHash;
+}
+
+public Instant getResetCodeExpiresAt() {
+    return resetCodeExpiresAt;
+}
+
+public void setResetCodeExpiresAt(Instant resetCodeExpiresAt) {
+    this.resetCodeExpiresAt = resetCodeExpiresAt;
+}
+
+public Instant getResetCodeSentAt() {
+    return resetCodeSentAt;
+}
+
+public void setResetCodeSentAt(Instant resetCodeSentAt) {
+    this.resetCodeSentAt = resetCodeSentAt;
+}
+
+public int getResetCodeAttempts() {
+    return resetCodeAttempts;
+}
+
+public void setResetCodeAttempts(int resetCodeAttempts) {
+    this.resetCodeAttempts = resetCodeAttempts;
+}
+public boolean isResetCodeVerified() {
+    return resetCodeVerified;
+}
+
+public void setResetCodeVerified(boolean resetCodeVerified) {
+    this.resetCodeVerified = resetCodeVerified;
+}
 }

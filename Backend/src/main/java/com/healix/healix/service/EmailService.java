@@ -39,4 +39,26 @@ public class EmailService {
         );
         mailSender.send(message);
     }
+    public void sendPasswordResetCode(String to, String name, String code) {
+    if (from == null || from.isBlank()) {
+        log.warn("MAIL NOT CONFIGURED. Password reset code for {} is: {}", to, code);
+        return;
+    }
+
+    SimpleMailMessage message = new SimpleMailMessage();
+    message.setFrom(from);
+    message.setTo(to);
+    message.setSubject("Reset Your Healix Password");
+    message.setText(
+        "Hi " + name + ",\n\n"
+        + "We received a request to reset your Healix account password.\n\n"
+        + "Your password reset code is: " + code + "\n\n"
+        + "This code expires in 10 minutes. If you didn't request a password reset, "
+        + "please ignore this email.\n\n"
+        + "Regards,\n"
+        + "Team Healix"
+    );
+
+    mailSender.send(message);
+}
 }

@@ -131,7 +131,10 @@ export function Navbar() {
             <Avatar sx={{ bgcolor: "#00C9A7", color: "#061021" }}>
               {user.fullName?.trim()?.charAt(0)?.toUpperCase() || "P"}
             </Avatar>
-            <span>Profile</span>
+            <span>{
+              JSON.parse(localStorage.getItem("user") || "{}") .fullName?.trim()
+              .split(/\s+/)[0] || "Profile"}
+            </span>
           </button>
 
           <button
