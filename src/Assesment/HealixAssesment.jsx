@@ -1,4 +1,4 @@
-import Navbar_main from "../Navbar_main";
+﻿import Navbar_main from "../Navbar_main";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
@@ -155,7 +155,7 @@ const handleNext = async (e) => {
 
   const progress = (currentStep / steps.length) * 100;
 
-  const renderFooter = ({ onContinue = handleNext, continueLabel = "Continue ⟶", showBack = true } = {}) => (
+  const renderFooter = ({ onContinue = handleNext, continueLabel = "Continue Γƒ╢", showBack = true } = {}) => (
     <div className="flex justify-between items-center mt-8">
       <button
         type="button"
@@ -233,13 +233,13 @@ const handleNext = async (e) => {
                 <div className="flex flex-wrap gap-2">
                   {symptoms.map((item) => (
                     <button key={item} type="button" onClick={() => toggleArrayValue("symptoms", item, "__none__")} className={`flex flex-row items-center gap-2 rounded-full border px-4 py-2 transition-colors ${formData.symptoms.includes(item) ? "bg-[#00C9A7] border-[#00C9A7] text-black" : "bg-white border-slate-200 text-slate-700 hover:border-[#00C9A7]"}`}>
-                      {formData.symptoms.includes(item) ? <span>●</span> : null}{item}
+                      {formData.symptoms.includes(item) ? <span>ΓùÅ</span> : null}{item}
                     </button>
                   ))}
                 </div>
                 <div>
                   <h3 className="text-base mb-2 text-black/80 font-semibold font-serif">Add your own symptom</h3>
-                  <p className="tracking-wider leading-5 text-black/60">If you don’t see your symptom listed, add it here. You can also use this section for symptoms that are hard to describe or not listed above.</p>
+                  <p className="tracking-wider leading-5 text-black/60">If you donΓÇÖt see your symptom listed, add it here. You can also use this section for symptoms that are hard to describe or not listed above.</p>
                 </div>
                 <div className="flex w-auto gap-3">
                   <TextField
@@ -277,7 +277,7 @@ const handleNext = async (e) => {
                   <button type="button" className="text-base text-black/60 tracking-wider font-serif py-2" onClick={() => navigate("/Healix_Home")}>Skip Assessment</button>
                   <div className="flex gap-3">
                     <button type="button" onClick={handleBack} className="px-5 py-2 rounded-full border border-slate-200 text-sm font-medium bg-white text-slate-700 hover:border-[#00C9A7] transition-colors">Back</button>
-                    <button type="submit" className="px-5 py-2 rounded-full border border-[#00C9A7] bg-[#00C9A7] text-sm font-semibold text-black hover:bg-[#00b899] transition-colors">Continue ⟶</button>
+                    <button type="submit" className="px-5 py-2 rounded-full border border-[#00C9A7] bg-[#00C9A7] text-sm font-semibold text-black hover:bg-[#00b899] transition-colors">Continue Γƒ╢</button>
                   </div>
                 </div>
               </div>
@@ -306,7 +306,7 @@ const handleNext = async (e) => {
               <div className="flex flex-wrap gap-2">
                 {["Heart Disease", "Diabetes", "Cancer", "Hypertension", "None"].map((item) => (
                   <button key={item} type="button" onClick={() => toggleArrayValue("familyHealthHistory", item, "None")} className={`flex flex-row items-center gap-2 rounded-full border px-4 py-2 transition-colors ${formData.familyHealthHistory.includes(item) ? "bg-[#00C9A7]/20 border-[#00C9A7] text-[#00A98D]" : "bg-white border-slate-200 text-slate-700 hover:border-[#00C9A7]"}`}>
-                    {formData.familyHealthHistory.includes(item) ? <span>●</span> : null}{item}
+                    {formData.familyHealthHistory.includes(item) ? <span>ΓùÅ</span> : null}{item}
                   </button>
                 ))}
               </div>
@@ -323,7 +323,7 @@ const handleNext = async (e) => {
               <button type="button" onClick={() => navigate("/Healix_Home")} className="text-base text-black/60 tracking-wider font-serif py-2">Save &amp; Exit</button>
               <div className="flex gap-3">
                 <button type="button" onClick={handleBack} className="px-5 py-2 rounded-full border border-slate-200 text-sm font-medium bg-white text-slate-700 hover:border-[#00C9A7] transition-colors">Back</button>
-                <button type="submit" className="px-5 py-2 rounded-full border border-[#00C9A7] bg-[#00C9A7] text-sm font-semibold text-black hover:bg-[#00b899] transition-colors">Continue ⟶</button>
+                <button type="submit" className="px-5 py-2 rounded-full border border-[#00C9A7] bg-[#00C9A7] text-sm font-semibold text-black hover:bg-[#00b899] transition-colors">Continue Γƒ╢</button>
               </div>
             </div>
           </form>
@@ -347,7 +347,7 @@ const handleNext = async (e) => {
                 <div className="flex flex-wrap gap-2">
                   {["< 6 hours", "6-8 hours", "8+ hours"].map((item) => (
                     <button key={item} type="button" onClick={() => updateField("sleepDuration", item)} className={`flex flex-row items-center gap-2 rounded-full border px-4 py-2 transition-colors ${formData.sleepDuration === item ? "bg-[#00C9A7]/20 border-[#00C9A7] text-[#00A98D]" : "bg-white border-slate-200 text-slate-700 hover:border-[#00C9A7]"}`}>
-                      {formData.sleepDuration === item ? <span>●</span> : null}{item}
+                      {formData.sleepDuration === item ? <span>ΓùÅ</span> : null}{item}
                     </button>
                   ))}
                 </div>
@@ -357,7 +357,7 @@ const handleNext = async (e) => {
                 <div className="flex flex-wrap gap-2">
                   {["Low", "Medium", "High"].map((item) => (
                     <button key={item} type="button" onClick={() => updateField("stressLevel", item)} className={`flex flex-row items-center gap-2 rounded-full border px-4 py-2 transition-colors ${formData.stressLevel === item ? "bg-[#00C9A7]/20 border-[#00C9A7] text-[#00A98D]" : "bg-white border-slate-200 text-slate-700 hover:border-[#00C9A7]"}`}>
-                      {formData.stressLevel === item ? <span>●</span> : null}{item}
+                      {formData.stressLevel === item ? <span>ΓùÅ</span> : null}{item}
                     </button>
                   ))}
                 </div>
@@ -371,7 +371,7 @@ const handleNext = async (e) => {
               <button type="button" onClick={() => navigate("/Healix_Home")} className="text-base text-black/60 tracking-wider font-serif py-2">Save &amp; Exit</button>
               <div className="flex gap-3">
                 <button type="button" onClick={handleBack} className="px-5 py-2 rounded-full border border-slate-200 text-sm font-medium bg-white text-slate-700 hover:border-[#00C9A7] transition-colors">Back</button>
-                <button type="submit" className="px-5 py-2 rounded-full border border-[#00C9A7] bg-[#00C9A7] text-sm font-semibold text-black hover:bg-[#00b899] transition-colors">Continue ⟶</button>
+                <button type="submit" className="px-5 py-2 rounded-full border border-[#00C9A7] bg-[#00C9A7] text-sm font-semibold text-black hover:bg-[#00b899] transition-colors">Continue Γƒ╢</button>
               </div>
             </div>
           </form>
@@ -393,14 +393,14 @@ const handleNext = async (e) => {
             </ReviewSection>
             <ReviewSection title="Lifestyle & Concerns" onEdit={() => setCurrentStep(3)}>
               <ReviewItem label="Physical Activity" value={formData.activityLevel || "Not specified"} />
-              <ReviewItem label="Daily Sleep / Stress" value={`${formData.sleepDuration || "Not specified"} · ${formData.stressLevel || "Not specified"} stress`} />
+              <ReviewItem label="Daily Sleep / Stress" value={`${formData.sleepDuration || "Not specified"} ┬╖ ${formData.stressLevel || "Not specified"} stress`} />
               <ReviewItem label="Primary Health Concern" value={formData.primaryHealthConcern || "None reported"} />
             </ReviewSection>
             <div className="flex justify-between items-center mt-5">
               <button type="button" onClick={() => navigate("/Healix_Home")} className="text-base text-black/60 tracking-wider font-serif py-2">Save &amp; Exit</button>
               <div className="flex gap-3">
                 <button type="button" onClick={handleBack} className="px-5 py-2 rounded-full border border-slate-200 text-sm font-medium bg-white text-slate-700 hover:border-[#00C9A7] transition-colors">Back</button>
-                <button type="submit" className="px-5 py-2 rounded-full border border-[#00C9A7] bg-[#00C9A7] text-sm font-semibold text-black hover:bg-[#00b899] transition-colors">Submit Assessment ⟶</button>
+                <button type="submit" className="px-5 py-2 rounded-full border border-[#00C9A7] bg-[#00C9A7] text-sm font-semibold text-black hover:bg-[#00b899] transition-colors">Submit Assessment Γƒ╢</button>
               </div>
             </div>
           </form>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import logoImage from "./assets/hero-logo.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import ButtonBase from "@mui/material/ButtonBase";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -64,6 +64,13 @@ const Navbar_links = ({pathTo, name}) => {
   );
 };
 const Navbar_main = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/login", { replace: true });
+  };
   return (
     <div className="sticky w-screen h-16 bg-[#0B1A2E] flex justify-between px-8 items-center">
       <div className="h-full flex items-center pr-3">
@@ -94,9 +101,12 @@ const Navbar_main = () => {
             }
           />
         </div>
-        <div className="flex items-center text-white/60 gap-2">
+        <div
+          onClick={handleLogout}
+          className="flex items-center text-white/60 gap-2 cursor-pointer"
+        >
           <LogoutIcon />
-          <Navbar_links pathTo="/login" name="Logout" />
+          <span>Logout</span>
         </div>
       </div>
     </div>

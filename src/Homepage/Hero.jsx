@@ -11,6 +11,9 @@ import Hero_Journey from "./Hero_Journey";
 import Hero_Explainibility from "./Hero_Explainibility"
 import Hero_finalCTA from "./Hero_finalCTA";
 import Footer from "./Footer";
+import { useNavigate } from "react-router-dom";
+import Avatar from "@mui/material/Avatar";
+import LogoutIcon from "@mui/icons-material/Logout";
 export function CTAButtons({ primary, secondary, primaryTo, secondaryTo,secondaryHref }) {
   return (
     <div className="text-white flex justify-start gap-8 text-lg">
@@ -38,7 +41,45 @@ export function CTAButtons({ primary, secondary, primaryTo, secondaryTo,secondar
     </div>
   );
 };
-export function Navbar(){
+
+export function Navbar() {
+  const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    Boolean(localStorage.getItem("token")),
+  );
+  const [user, setUser] = useState(() =>
+    JSON.parse(localStorage.getItem("user") || "{}"),
+  );
+
+  useEffect(() => {
+    const syncAuth = () => {
+      const token = localStorage.getItem("token");
+      const savedUser = JSON.parse(localStorage.getItem("user") || "{}");
+
+      setIsLoggedIn(Boolean(token));
+      setUser(savedUser);
+    };
+
+    window.addEventListener("focus", syncAuth);
+    window.addEventListener("pageshow", syncAuth);
+    window.addEventListener("storage", syncAuth);
+
+    return () => {
+      window.removeEventListener("focus", syncAuth);
+      window.removeEventListener("pageshow", syncAuth);
+      window.removeEventListener("storage", syncAuth);
+    };
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
+    setIsLoggedIn(false);
+    setUser({});
+    navigate("/", { replace: true });
+  };
+
   return (
     <div className="h-full w-full flex justify-between items-center">
       <div className="w-1/6 h-full flex items-center">
@@ -46,7 +87,8 @@ export function Navbar(){
           <img src={logoImage} alt="HEALIX" className="w-auto h-full" />
         </a>
       </div>
-      <div className="h-full w-2/5 flex justify-between items-center text-white text-xl ">
+
+      <div className="h-full w-2/5 flex justify-between items-center text-white text-xl">
         <a
           href="#home"
           className="transition-transform duration-300 hover:underline hover:decoration-[#00C9A7] underline-offset-4"
@@ -78,17 +120,43 @@ export function Navbar(){
           Contact
         </a>
       </div>
-      <div>
+
+      {isLoggedIn ? (
+        <div className="flex items-center gap-5">
+          <button
+            onClick={() => navigate("/Dashboard")}
+            className="flex items-center gap-2 text-white text-xl"
+            aria-label="Open profile"
+          >
+            <Avatar sx={{ bgcolor: "#00C9A7", color: "#061021" }}>
+              {user.fullName?.trim()?.charAt(0)?.toUpperCase() || "P"}
+            </Avatar>
+            <span>{
+              JSON.parse(localStorage.getItem("user") || "{}") .fullName?.trim()
+              .split(/\s+/)[0] || "Profile"}
+            </span>
+          </button>
+
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-2 text-xl text-white hover:text-[#00C9A7]"
+          >
+            <LogoutIcon />
+            <span>Logout</span>
+          </button>
+        </div>
+      ) : (
         <CTAButtons
           primary="Register Now"
           secondary="Login"
           primaryTo="/register"
           secondaryTo="/login"
         />
-      </div>
+      )}
     </div>
   );
-};
+}
+
 const Hero = () => {
    const [scrolled, setScrolled] = useState(false);
   useEffect(()=>{
